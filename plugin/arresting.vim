@@ -10,7 +10,20 @@ let g:loaded_arresting = 1
 
 
 let s:rst_title_char = "="
-let s:rst_heading_chars = ["=", "-", "+"]
+
+" From http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections
+" The following are all valid section title adornment characters:
+
+" ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
+" Some characters are more suitable than others. The following are recommended:
+
+" = - ` : . ' " ~ ^ _ * + #
+
+let s:valid_rst_heading_chars = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
+let s:recommended_rst_heading_chars = '=-`:.''"~^_*+#'
+let s:python_rst_heading_chars = '=-^"'
+let s:default_rst_heading_chars = '=-#*'
+let s:current_rst_heading_chars = s:default_rst_heading_chars
 
 
 function! s:getchar()
@@ -48,12 +61,11 @@ function! s:prevline()
 endfunction
 
 function! s:is_valid_heading_line(str)
-  for c in s:rst_heading_chars
-    if a:str =~ '^'.c.'\+$'
-      return 1
-    endif
-  endfor
-  return 0
+  if a:str =~ '\v^(.)\1*$' && match(s:valid_rst_heading_chars, a:str[0]) > -1
+    return 1
+  else
+    return 0
+  endif
 endfunction
 
 function! s:is_heading()
