@@ -3,10 +3,9 @@
 " Author: Joseph Irwin <https://github.com/cordarei/>
 
 
-if exists('g:loaded_arresting') || &cp
+if exists("b:did_ftplugin")
   finish
 endif
-let g:loaded_arresting = 1
 
 
 let s:rst_title_char = "="
@@ -94,14 +93,17 @@ function! s:change_heading_char(chr)
   endif
 endfunction
 
-nnoremap <silent> <Plug>ArrestingMaketitle :call <SID>make_rst_heading(<SID>getchar(), 1)<cr>
-nnoremap <silent> <Plug>ArrestingMakeheading :call <SID>make_rst_heading(<SID>getchar(), 0)<cr>
-nnoremap <silent> <Plug>ArrestingChangeheadingchar :call <SID>change_heading_char(<SID>getchar())<cr>
 
-function! ArrestingCreateDefaultMappings()
+nnoremap <buffer> <silent> <Plug>ArrestingMaketitle :call <SID>make_rst_heading(<SID>getchar(), 1)<cr>
+nnoremap <buffer> <silent> <Plug>ArrestingMakeheading :call <SID>make_rst_heading(<SID>getchar(), 0)<cr>
+nnoremap <buffer> <silent> <Plug>ArrestingChangeheadingchar :call <SID>change_heading_char(<SID>getchar())<cr>
+
+
+if !exists('arresting_no_maps')
   nmap <buffer> <localleader>rt <Plug>ArrestingMaketitle
   nmap <buffer> <localleader>rh <Plug>ArrestingMakeheading
   nmap <buffer> <localleader>rc <Plug>ArrestingChangeheadingchar
-endfunction
+endif
+
 
 " vim:set ft=vim sw=2 sts=2 et:
